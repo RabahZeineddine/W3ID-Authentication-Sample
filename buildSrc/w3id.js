@@ -52,8 +52,6 @@ const login = (req, res) => {
 
 const assert = (req, res) => {
     let response = req.body.SAMLResponse || req.body.SAMLRequest;
-    console.log('response: ' + req );
-    
     saml2FJ.toFiltredJSON(response, (data) => {
         res.render(this.AssertPage, { data: data });
     })
