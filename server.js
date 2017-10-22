@@ -50,14 +50,11 @@ app.post('/api/v1/authenticate', (req, res) => {
             break;
         }
     }
-
     if(authenticated){
         res.status(200).json({authenticated, redirect: '/home'});
     }else{
         res.status(403).json({authenticated, redirect: '/'});
     }
-
-
 });
 
 
