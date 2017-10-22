@@ -15,9 +15,10 @@ let w3id = require('./buildSrc/w3id');
 app.set('port', process.env.PORT || 4000);
 app.set('views', __dirname + '/views');
 app.set('view engine', 'ejs');
+
 app.engine('html', require('ejs').renderFile);
 
-
+app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(express.static(path.join(__dirname, 'public')));
 
@@ -39,8 +40,25 @@ app.post("/assert", w3id.assert);
 
 app.get('/metadata.xml', w3id.metadata);
 
+// Use your own strategy to authenticate a user, we are going to use BlueGroup.
+app.post('/api/v1/authenticate', (req, res) => {
+    let user = req.body;
+    let authenticated = false;
+    for(let bluegroup of user.blueGroups){
+        if(bluegroup.name == "W3ID Sample") { // You can choose whatever you want, as long as you add your users to that bluegroup.
+            authenticated = true;
+            break;
+        }
+    }
+
+    if(authenticated){
+        res.status(200).json({authenticated, redirect: '/home'});
+    }else{
+        res.status(403).json({authenticated, redirect: '/'});
+    }
 
 
+});
 
 
 app.listen(app.get('port'), '0.0.0.0', () => {
