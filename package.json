@@ -1,0 +1,15 @@
+{
+  "name": "w3id_sample",
+  "version": "",
+  "description": "W3ID Authentication Sample",
+  "scripts": {
+    "start": "node server"
+  },
+  "dependencies": {
+    "body-parser": "^1.18.2",
+    "ejs": "^2.5.7",
+    "express": "^4.16.2",
+    "saml2-js": "^1.12.2",
+    "saml2fj": "^1.1.12"
+  }
+}
