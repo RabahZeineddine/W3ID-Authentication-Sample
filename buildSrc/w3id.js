@@ -31,7 +31,9 @@ const init = (app) => {
     sp = new saml2.ServiceProvider(sp_options);
 
     idp_options = {
-        sso_login_url: `https://w3id.alpha.sso.ibm.com/auth/sps/samlidp/saml20/logininitial?RequestBinding=HTTPPost&PartnerId=${this.URL}/metadata.xml&NameIdFormat=email&Target=${this.URL}`,
+        ///NameIdFormat=Email&PartnerId=*entityID-from-SP-metadata-file*
+        
+        sso_login_url: `https://w3id.alpha.sso.ibm.com/auth/sps/samlidp/saml20/logininitial?RequestBinding=HTTPPost&PartnerId=${sp_options.entity_id}&NameIdFormat=Email&Target=${this.URL}`,
         certificates: fs.readFileSync(`${CERT_PATH}/w3id.sso.ibm.com`).toString()
     }
 
@@ -40,19 +42,18 @@ const init = (app) => {
 
 
 const login = (req, res) => {
-    // sp.create_login_request_url(idp, {}, (err, login_url, request_id) => {
-    //     if (err != null)
-    //         return res.send(500);
-    //     console.log(login_url);
-    //     res.redirect(login_url);
-    // });
-    res.render('auth.html', {data: {firstName: "Rabah", lastName: "Zeineddine", blueGroups:[{name: "CloudWarrior/Admin"}]}})
+    sp.create_login_request_url(idp, {}, (err, login_url, request_id) => {
+        if (err != null)
+            return res.send(500);
+        res.redirect(login_url);
+    });
+    // res.render('auth.html', {data: {firstName: "Rabah", lastName: "Zeineddine", blueGroups:[{name: "CloudWarrior/Admin"}]}})
 }
 
-
 const assert = (req, res) => {
-    let options = { request_body: req };
     let response = req.body.SAMLResponse || req.body.SAMLRequest;
+    console.log('response: ' + req );
+    
     saml2FJ.toFiltredJSON(response, (data) => {
         res.render(this.AssertPage, { data: data });
     })
