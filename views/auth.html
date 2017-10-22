@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Authentication</title>
+</head>
+
+<body>
+    <% if (typeof data != 'undefined') {  %>
+
+        <input type="hidden" id="user" value='<%= JSON.stringify(data) %>' />
+        <% }else{  %>
+            <p> An error occured! try again later.</p>
+            <a href="/">Go back to home page</a>
+            <% } %>
+
+                <script src="/scripts/util.js"></script>
+                <script src="/scripts/auth.js"></script>
+</body>
+
+</html>
